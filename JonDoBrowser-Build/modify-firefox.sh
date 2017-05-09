@@ -43,8 +43,8 @@ mv ./archivereader_tmp.cpp ./toolkit/mozapps/update/updater/archivereader.cpp
 #modification for xpi signature check disable
 git grep -l 'torbutton@torproject.org' | xargs sed -i 's/torbutton@torproject.org/info@jondos.de/g'
 git grep -l 'torbutton%40torproject.org' | xargs sed -i 's/torbutton%40torproject.org/info%40jondos.de/g'
-git grep -l 'TorBrowser.app' | xargs sed -i 's/TorBrowser.app/JonDoBrowser.app/g'
 #modificaction for brand
+git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
 git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
 git grep -l 'Tor Project' | xargs sed -i 's/Tor Project/JonDos GmbH/g'
 git grep -l 'Firefox and the Firefox logos are trademarks of the Mozilla Foundation.' | xargs sed -i 's/Firefox and the Firefox logos are trademarks of the Mozilla Foundation./JonDoBrowser and the JonDoBrowser logos are trademarks of JonDos GmbH, Germany./g'

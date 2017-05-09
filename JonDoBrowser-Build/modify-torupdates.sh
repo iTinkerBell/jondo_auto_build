@@ -4,13 +4,13 @@ cd /var/www/torupdates
 #modify config.yml
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"archive_url: "* ]]; then
-		echo "    archive_url: https://jondobrowser.jondos.de/torbrowser/"
+		echo "    archive_url: https://jondobrowser.jondos.de/jondobrowser/"
 	elif [[ $line == *"gpg_keyring: "* ]]; then
 		echo "    gpg_keyring: $project_dir/keyring/tinkerbel.gpg"
 	elif [[ $line == *"bundles_url: "* ]]; then
-		echo "    bundles_url: https://jondobrowser.jondos.de/torbrowser/"
+		echo "    bundles_url: https://jondobrowser.jondos.de/jondobrowser/"
 	elif [[ $line == *"mars_url: "* ]]; then
-		echo "    mars_url: https://jondobrowser.jondos.de/torbrowser/"
+		echo "    mars_url: https://jondobrowser.jondos.de/jondobrowser/"
 	elif [[ $line == *"alpha: "* ]]; then
 		echo "    alpha: $torbrowser_version"
 	elif [[ $line == *"release: "* ]]; then
@@ -25,4 +25,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "$line"	
 	fi
 done < "config.yml" > "config.yml.tmp"
+git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
+git grep -l 'torbrowser' | xargs sed -i 's/torbrowser/jondobrowser/g'
 mv config.yml.tmp config.yml

@@ -7,7 +7,10 @@ cd ../tor-browser-build
 cp $keyring_path ./keyring/tinkerbel.gpg
 
 #modify firefox build
-git grep -l 'TorBrowser.app' | xargs sed -i 's/TorBrowser.app/JonDoBrowser.app/g'
+#git grep -l 'TorBrowser.app' | xargs sed -i 's/TorBrowser.app/JonDoBrowser.app/g'
+git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
+git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
+
 
 #modify firefox config
 while IFS='' read -r line || [[ -n "$line" ]]; do

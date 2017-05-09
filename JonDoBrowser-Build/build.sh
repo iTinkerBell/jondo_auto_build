@@ -19,14 +19,17 @@ source "$project_dir/modify-torupdates.sh"
 cd $project_dir
 cd ../tor-browser-build
 make alpha
+cd "alpha/unsigned/$torbrowser_version"
+rename 's/torbrowser/jondobrowser/g' *
+rename 's/TorBrowser/JonDoBrowser/g' *
 
 #copy
 cd /var/www/torupdates/htdocs
-if ! [ -d torbrowser ] ; then
-	mkdir torbrowser
+if ! [ -d jondobrowser ] ; then
+	mkdir jondobrowser
 fi
 cd $project_dir
 cd ..
-cp -r "tor-browser-build/alpha/unsigned/$torbrowser_version" "/var/www/torupdates/htdocs/torbrowser"
-cd ../../
+cp -r "tor-browser-build/alpha/unsigned/$torbrowser_version" "/var/www/torupdates/htdocs/jondobrowser"
+cd /var/www/torupdates
 ./update_responses

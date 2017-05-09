@@ -12,7 +12,10 @@ while read -r line || [[ -n "$line" ]]; do
 		break
 	fi
 done < "src/install.rdf"
-git grep -l 'About Torbutton' | xargs sed -i 's/About Torbutton/About JondDo addon/g'
-git grep -l 'About Tor' | xargs sed -i 's/About Tor/About JondDoBrowser/g'
+git grep -l 'About Torbutton' | xargs sed -i 's/About Torbutton/About JonDo addon/g'
+git grep -l 'About Tor Browser' | xargs sed -i 's/About Tor Browser/About JonDoBrowser/g'
+git grep -l 'About Tor' | xargs sed -i 's/About Tor/About JonDoBrowser/g'
+git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
+git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
 #commit to local git repo
 source "$project_dir/local-commit.sh" $jondoaddon_version
