@@ -18,14 +18,15 @@ source "$project_dir/modify-torupdates.sh"
 #make
 cd $project_dir
 cd ../tor-browser-build
-make alpha-windows-i686
+make alpha
 
 #copy
 cd /var/www/torupdates/htdocs
 if ! [ -d torbrowser ] ; then
 	mkdir torbrowser
 fi
-cd torbrowser
-cp -r "alpha/unsigned/$torbrowser_version" ./
+cd $project_dir
+cd ..
+cp -r "tor-browser-build/alpha/unsigned/$torbrowser_version" "/var/www/torupdates/htdocs/torbrowser"
 cd ../../
 ./update_responses
