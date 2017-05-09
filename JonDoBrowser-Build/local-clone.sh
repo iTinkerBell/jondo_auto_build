@@ -16,6 +16,9 @@ source "$project_dir/local-clone-separate.sh" tor-browser https://git.torproject
 #clone jondo addon
 source "$project_dir/local-clone-separate.sh" jondobrowser https://github.com/jondos/jondobrowser jondoaddon-local
 
+#clone tbb-windows-installer
+source "$project_dir/local-clone-separate.sh" tbb-windows-installer https://github.com/moba/tbb-windows-installer.git tbb-windows-installer-local
+
 #clone tor-browser-build
 cd ..
 source "$project_dir/local-clone-separate.sh" tor-browser-build https://git.torproject.org/builders/tor-browser-build.git

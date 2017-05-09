@@ -11,6 +11,20 @@ cp $keyring_path ./keyring/tinkerbel.gpg
 git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
 git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
 
+#modify tbb-windows-installer config
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"git_url: "* ]]; then
+		echo "git_url: $git_dir/tbb-windows-installer-local/.git"
+	elif [[ $line == *"gpg_keyring: "* ]]; then
+		echo "gpg_keyring: tinkerbel.gpg"
+	elif [[ $line == *"version: "* ]]; then
+		tbb_windows_installer_version=${line##*version: }
+		echo "$line"
+	else
+		echo "$line"	
+	fi
+done < "./projects/tbb-windows-installer/config" > "./config.tmp"
+mv ./config.tmp ./projects/tbb-windows-installer/config
 
 #modify firefox config
 while IFS='' read -r line || [[ -n "$line" ]]; do
