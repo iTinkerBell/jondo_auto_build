@@ -15,4 +15,5 @@ git tag -a $tagname $commit_hash -f
 #config to use fingerprint
 git config --local user.signingkey $keyring_fingerprint
 #sign the commit
+echo $tagname, $keyring_fingerprint
 git tag -s $tagname -m "automatic signing" -f
