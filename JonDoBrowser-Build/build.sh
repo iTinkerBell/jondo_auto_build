@@ -1,13 +1,28 @@
 #!/bin/bash
 tor_browser_build_commit_hash=${1:-b9fc5fc4a562ea8c5d7fdb797fd3c1ea6f6b413e}
-echo $tor_browser_build_commit_hash
+echo "Building with $tor_browser_build_commit_hash bundle."
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 #check if keyring exists
 source "$project_dir/check-gpg.sh"
 
-#clone repositories to work with
+#clean git_clone directory
+cd ..
+if [ -d "tor-browser-build/git_clones" ]; then
+	rm -r tor-browser-build/git_clones/firefox
+	rm -r tor-browser-build/git_clones/jondoaddon
+	rm -r tor-browser-build/git_clones/tbb-windows-installer
+fi
+
+#clone tor-browser-build : need to be done before any other cloning
+source "$project_dir/local-clone-separate.sh" tor-browser-build https://git.torproject.org/builders/tor-browser-build.git
+cd tor-browser-build
+git checkout $tor_browser_build_commit_hash
+
+#clone repositories to work with : jondoaddon, firefox, tbb-windows-installer
 source "$project_dir/local-clone.sh"
+
+tmp_branch_name=`date +%Y%m%d%H%M%S`
 
 #modify local repositories
 source "$project_dir/modify-jondoaddon.sh"

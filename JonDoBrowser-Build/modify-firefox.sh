@@ -22,7 +22,9 @@ torbrowser_branch="tor-browser-$firefox_version-$tmp_branch-$tmp_subversion"
 torbrowser_tag="$torbrowser_branch-$tmp_build"
 cd ..
 cd local-repo/firefox-local
-git checkout $torbrowser_branch
+#git checkout $torbrowser_branch
+#make a new temporary branch from the tag
+git checkout -b "jondo$tmp_branch_name" $torbrowser_tag
 #modification for update url
 sed -i -- 's#aus1.torproject.org/torbrowser/update_3#jondobrowser.jondos.de#g' ./browser/app/profile/firefox.js
 sed -i -- 's#www.torproject.org/download/download-easy.html#jondobrowser.jondos.de/jondobrowser/#g' ./browser/branding/official/pref/firefox-branding.js
