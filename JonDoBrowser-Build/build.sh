@@ -38,6 +38,7 @@ make alpha
 cd "alpha/unsigned/$torbrowser_version"
 rename 's/torbrowser/jondobrowser/g' *
 rename 's/TorBrowser/JonDoBrowser/g' *
+rename 's/tor-browser/jondorowser/g' *
 
 #copy
 cd /var/www/torupdates/htdocs

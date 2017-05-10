@@ -6,7 +6,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"archive_url: "* ]]; then
 		echo "    archive_url: https://jondobrowser.jondos.de/jondobrowser/"
 	elif [[ $line == *"gpg_keyring: "* ]]; then
-		echo "    gpg_keyring: $project_dir/keyring/tinkerbel.gpg"
+		echo "    gpg_keyring: $project_dir/../tor-browser-build/keyring/tinkerbel.gpg"
 	elif [[ $line == *"bundles_url: "* ]]; then
 		echo "    bundles_url: https://jondobrowser.jondos.de/jondobrowser/"
 	elif [[ $line == *"mars_url: "* ]]; then
@@ -25,6 +25,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "$line"	
 	fi
 done < "config.yml" > "config.yml.tmp"
+mv config.yml.tmp config.yml
 git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
 git grep -l 'torbrowser' | xargs sed -i 's/torbrowser/jondobrowser/g'
-mv config.yml.tmp config.yml
+sed -i -- 's#tor-browser#jondobrowser#g' ./update_responses
