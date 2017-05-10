@@ -11,7 +11,7 @@ do
 	fi
 done <<< "$(git log -1)"
 #give a tagname
-git tag -a $tagname $commit_hash -f
+git tag -a $tagname $commit_hash -m "automatic commit for jondobrowser-local" -f
 #config to use fingerprint
 git config --local user.signingkey $keyring_fingerprint
 #sign the commit
