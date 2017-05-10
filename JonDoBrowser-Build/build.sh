@@ -34,6 +34,8 @@ source "$project_dir/modify-tbb-windows-installer.sh"
 #make
 cd $project_dir
 cd ../tor-browser-build
+mkdir -p "alpha/unsigned/$torbrowser_version"
+rm -r "alpha/unsigned/$torbrowser_version"
 make alpha
 cd "alpha/unsigned/$torbrowser_version"
 rename 's/torbrowser/jondobrowser/g' *
