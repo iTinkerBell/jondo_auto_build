@@ -10,13 +10,6 @@ echo '- Using local-repo directory to clone remote repositories'
 cd local-repo
 git_dir=`pwd`
 
-#clone tor-browser-build : need to be done before any other cloning
-cd ..
-source "$project_dir/local-clone-separate.sh" tor-browser-build https://git.torproject.org/builders/tor-browser-build.git
-cd tor-browser-build
-git checkout $tor_browser_build_commit_hash
-cd ../local-repo
-
 #clone tor-browser
 source "$project_dir/local-clone-separate.sh" tor-browser https://git.torproject.org/tor-browser.git firefox-local
 

@@ -19,7 +19,7 @@ source "$project_dir/local-clone-separate.sh" tor-browser-build https://git.torp
 cd tor-browser-build
 git checkout $tor_browser_build_commit_hash
 
-#clone repositories to work with : jondoaddon, firefox, tbb-windows-installer
+#clone repositories to work with : jondoaddon, firefox, tbb-windows-installer, torupdates
 source "$project_dir/local-clone.sh"
 
 tmp_branch_name=`date +%Y%m%d%H%M%S`
