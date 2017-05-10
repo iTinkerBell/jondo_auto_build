@@ -44,6 +44,8 @@ mv ./config.tmp ./projects/firefox/config
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"mv"*"input_files_by_name/tor-launcher"* ]]; then
 		nothing=""
+	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
+		nothing=""
 	elif [[ $line == *"mv"*"input_files_by_name/torbutton"* ]]; then
 		echo "mv [% c('input_files_by_name/jondoaddon') %] "'$TBDIR/$EXTSPATH/info@jondos.de.xpi'
 	else
@@ -51,6 +53,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	fi
 done < "./projects/tor-browser/build" > "./build.tmp"
 mv ./build.tmp ./projects/tor-browser/build
+sed -i -- 's#tor-browser_#jondobrowser_#g' ./projects/tor-browser/build
+sed -i -- 's#PKG_DIR="tor-browser"#PKG_DIR="jondobrowser"#g' ./projects/tor-browser/build
 
 #modify tor-browser config
 while IFS='' read -r line || [[ -n "$line" ]]; do
@@ -60,6 +64,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "  - project: jondoaddon"
 	elif [[ $line == *"name: torbutton"* ]]; then
 		echo "    name: jondoaddon"
+	elif [[ $line == *"- project: tor" ]] || [[ $line == *"name: tor" ]] ; then
+		nothing=""
 	else
 		echo "$line"	
 	fi
