@@ -46,6 +46,13 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		nothing=""
 	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
 		nothing=""
+	elif [[ $line == *"Extract the MAR tools"* ]]; then
+		echo "[% IF c(\"var/windows\") %]"
+		echo "  mkdir -p \$TBDIR/JonDo"
+		echo "  mv -r \$rootdir/JonDo/JonDo_Windows \$TBDIR/JonDo"
+		echo "[% END %]"
+		echo ""
+		echo "$line"
 	elif [[ $line == *"mv"*"input_files_by_name/torbutton"* ]]; then
 		echo "mv [% c('input_files_by_name/jondoaddon') %] "'$TBDIR/$EXTSPATH/info@jondos.de.xpi'
 	else
@@ -66,11 +73,15 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "    name: jondoaddon"
 	elif [[ $line == *"- project: tor" ]] || [[ $line == *"name: tor" ]] ; then
 		nothing=""
+	elif [[ $line == *"filename: Bundle-Data"* ]]; then
+		echo "$line"
+		echo "  - filename: JonDo"
 	else
 		echo "$line"	
 	fi
 done < "./projects/tor-browser/config" > "./config.tmp"
 mv ./config.tmp ./projects/tor-browser/config
+cp -r "$project_dir/JonDo" ./projects/tor-browser/JonDo
 
 #remove tor-launcher from project
 rm -r ./projects/tor-launcher
