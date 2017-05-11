@@ -40,7 +40,10 @@ make alpha
 cd "alpha/unsigned/$torbrowser_version"
 rename 's/torbrowser/jondobrowser/g' *
 rename 's/TorBrowser/JonDoBrowser/g' *
-rename 's/tor-browser/jondorowser/g' *
+rename 's/tor-browser/jondobrowser/g' *
+sed -i -- 's#tor-browser#jondobrowser#g' ./sha256sums-unsigned-build.txt
+sed -i -- 's#torbrowser#jondobrowser#g' ./sha256sums-unsigned-build.txt
+sed -i -- 's#TorBrowser#JonDoBrowser#g' ./sha256sums-unsigned-build.txt
 
 #copy
 cd /var/www/torupdates/htdocs
