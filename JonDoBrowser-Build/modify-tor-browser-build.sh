@@ -49,7 +49,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	elif [[ $line == *"Extract the MAR tools"* ]]; then
 		echo "[% IF c(\"var/windows\") %]"
 		echo "  mkdir -p \$TBDIR/JonDo"
-		echo "  mv -r \$rootdir/JonDo/JonDo_Windows \$TBDIR/JonDo"
+		echo "  mv -r \$rootdir/JonDo/JonDo_Windows/* \$TBDIR/JonDo/"
 		echo "[% END %]"
 		echo ""
 		echo "$line"

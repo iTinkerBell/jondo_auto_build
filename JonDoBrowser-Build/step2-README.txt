@@ -59,7 +59,7 @@ Here we need to delete 'torbutton', 'tor-launcher' projects and add 'jondoaddon'
 (delete this folder)
 
 (4) rename 'torbutton' to 'jondoaddon'
-(mv -r torbutton jondoaddon)
+(mv torbutton jondoaddon)
 
 (5) ./projects/jondoaddon/config
 ...
