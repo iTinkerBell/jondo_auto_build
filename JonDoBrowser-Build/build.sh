@@ -17,7 +17,7 @@ fi
 #clone tor-browser-build : need to be done before any other cloning
 source "$project_dir/local-clone-separate.sh" tor-browser-build https://git.torproject.org/builders/tor-browser-build.git
 cd tor-browser-build
-git checkout $tor_browser_build_commit_hash
+git checkout $tor_browser_build_commit_hash -f
 
 #clone repositories to work with : jondoaddon, firefox, tbb-windows-installer, torupdates
 source "$project_dir/local-clone.sh"

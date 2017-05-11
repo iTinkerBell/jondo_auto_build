@@ -1,6 +1,7 @@
 #!/bin/bash
 #modify torupdates local repository
 cd /var/www/torupdates
+git pull
 #modify config.yml
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"archive_url: "* ]]; then
