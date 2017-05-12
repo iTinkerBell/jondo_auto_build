@@ -47,9 +47,16 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
 		nothing=""
 	elif [[ $line == *"Extract the MAR tools"* ]]; then
+		#copy JonDo for windows
 		echo "[% IF c(\"var/windows\") %]"
 		echo "  mkdir -p \$TBDIR/JonDo"
 		echo "  mv \$rootdir/JonDo/JonDo_Windows/* \$TBDIR/JonDo/"
+		echo "[% END %]"
+		echo ""
+		echo "$line"
+		echo "[% IF c(\"var/linux\") %]"
+		echo "  mkdir -p \$TBDIR/JonDo"
+		echo "  mv \$rootdir/JonDo/JonDo_Linux/* \$TBDIR/JonDo/"
 		echo "[% END %]"
 		echo ""
 		echo "$line"
@@ -86,6 +93,19 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "./projects/tor-browser/config" > "./config.tmp"
 mv ./config.tmp ./projects/tor-browser/config
 cp -r "$project_dir/JonDo" ./projects/tor-browser/JonDo
+
+#modify tor-browser/RelativeLink/start-tor-browser script
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"elif"*"detach"*"then"* ]]; then
+		echo "$line"
+		echo "    if [ \`ps aux | grep [J]AP.jar | wc -l\` == \"0\" ]; then"
+		echo "        java -jar ./JonDo/JAP.jar &"
+		echo "    fi"
+	else
+		echo "$line"	
+	fi
+done < "./projects/tor-browser/RelativeLink/start-tor-browser" > "./start-tor-browser.tmp"
+mv ./start-tor-browser.tmp ./projects/tor-browser/RelativeLink/start-tor-browser
 
 #remove tor-launcher from project
 rm -r ./projects/tor-launcher
