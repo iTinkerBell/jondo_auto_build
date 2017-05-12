@@ -55,6 +55,10 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "$line"
 	elif [[ $line == *"mv"*"input_files_by_name/torbutton"* ]]; then
 		echo "mv [% c('input_files_by_name/jondoaddon') %] "'$TBDIR/$EXTSPATH/info@jondos.de.xpi'
+	elif [[ $line == *"TORBINPATH"* ]] || [[ $line == *"TORCONFIGPATH"* ]] || [[ $line == *"MEEKPROFILEPATH"* ]]; then
+		nothing=""
+	elif [[ $line == *"mkdir"*"/Tor" ]] || [[ $line == *"cp"*"/Tor/" ]] || [[ $line == *"chomod"*"/Tor" ]]; then
+		nothing=""
 	else
 		echo "$line"	
 	fi
