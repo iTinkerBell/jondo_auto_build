@@ -98,7 +98,7 @@ cp -r "$project_dir/JonDo" ./projects/tor-browser/JonDo
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"elif"*"detach"*"then"* ]]; then
 		echo "$line"
-		echo "    if [ \`ps aux | grep [J]AP.jar | wc -l\` == \"0\" ]; then"
+		echo "    if [ \`ps aux | grep \"[J]AP.jar\" | wc -l\` == \"0\" ]; then"
 		echo "        java -jar ./JonDo/JAP.jar &"
 		echo "    fi"
 	else
