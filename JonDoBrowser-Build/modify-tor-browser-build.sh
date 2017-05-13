@@ -43,7 +43,8 @@ mv ./config.tmp ./projects/firefox/config
 #modify tor-browser build
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"mv"*"input_files_by_name/tor-launcher"* ]]; then
-		nothing=""
+		#nothing=""
+		echo "mv \$rootdir/JonDo/jondo-launcher@jondos.de.xpi \$TBDIR/\$EXTSPATH/jondo-launcher@jondos.de.xpi"
 	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
 		nothing=""
 	elif [[ $line == *"Extract the MAR tools"* ]]; then
@@ -94,21 +95,9 @@ done < "./projects/tor-browser/config" > "./config.tmp"
 mv ./config.tmp ./projects/tor-browser/config
 cp -r "$project_dir/JonDo" ./projects/tor-browser/JonDo
 
-#modify tor-browser/RelativeLink/start-tor-browser script
-while IFS='' read -r line || [[ -n "$line" ]]; do
-	if [[ $line == *"elif"*"detach"*"then"* ]]; then
-		echo "$line"
-		echo "    if [ \`ps aux | grep \"[J]AP.jar\" | wc -l\` == \"0\" ]; then"
-		echo "        java -jar ./JonDo/JAP.jar &"
-		echo "    fi"
-	else
-		echo "$line"	
-	fi
-done < "./projects/tor-browser/RelativeLink/start-tor-browser" > "./start-tor-browser.tmp"
-mv ./start-tor-browser.tmp ./projects/tor-browser/RelativeLink/start-tor-browser
-
-#remove tor-launcher from project
+#remove tor, tor-launcher from project
 rm -r ./projects/tor-launcher
+rm -r ./projects/tor
 
 #rename torbutton to jondoaddon and modify config
 mv ./projects/torbutton ./projects/jondoaddon

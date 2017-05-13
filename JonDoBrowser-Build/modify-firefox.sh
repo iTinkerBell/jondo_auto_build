@@ -45,6 +45,8 @@ mv ./archivereader_tmp.cpp ./toolkit/mozapps/update/updater/archivereader.cpp
 #modification for xpi signature check disable
 git grep -l 'torbutton@torproject.org' | xargs sed -i 's/torbutton@torproject.org/info@jondos.de/g'
 git grep -l 'torbutton%40torproject.org' | xargs sed -i 's/torbutton%40torproject.org/info%40jondos.de/g'
+git grep -l 'tor-launcher@torproject.org' | xargs sed -i 's/tor-launcher@torproject.org/jondo-launcher@jondos.de/g'
+git grep -l 'tor-launcher%40torproject.org' | xargs sed -i 's/tor-launcher%40torproject.org/jondo-launcher%40jondos.de/g'
 #modificaction for brand
 git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
 git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
