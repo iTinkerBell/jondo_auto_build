@@ -97,7 +97,6 @@ cp -r "$project_dir/JonDo" ./projects/tor-browser/JonDo
 
 #remove tor, tor-launcher from project
 rm -r ./projects/tor-launcher
-rm -r ./projects/tor
 
 #rename torbutton to jondoaddon and modify config
 mv ./projects/torbutton ./projects/jondoaddon
