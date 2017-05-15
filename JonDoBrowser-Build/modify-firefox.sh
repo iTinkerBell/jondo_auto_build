@@ -42,6 +42,17 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	fi
 done < "./toolkit/mozapps/update/updater/archivereader.cpp" > "./archivereader_tmp.cpp"
 mv ./archivereader_tmp.cpp ./toolkit/mozapps/update/updater/archivereader.cpp
+#modification for killing java when updating
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"const int callbackIndex ="* ]]; then
+		echo "#ifdef XP_WIN"
+		echo "  system(\"taskkill /F /T /IM JonDo.exe\");"
+		echo "  system(\"wmic process where \\\"name like \'%java%\'\\\" delete\");"
+		echo "#endif"
+	fi
+	echo "$line"
+done < "./toolkit/mozapps/update/updater/updater.cpp" > "./updater.cpp.tmp"
+mv ./updater.cpp.tmp ./toolkit/mozapps/update/updater/updater.cpp
 #modification for xpi signature check disable
 git grep -l 'torbutton@torproject.org' | xargs sed -i 's/torbutton@torproject.org/info@jondos.de/g'
 git grep -l 'torbutton%40torproject.org' | xargs sed -i 's/torbutton%40torproject.org/info%40jondos.de/g'
@@ -53,5 +64,6 @@ git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
 git grep -l 'Tor Project' | xargs sed -i 's/Tor Project/JonDos GmbH/g'
 git grep -l 'Firefox and the Firefox logos are trademarks of the Mozilla Foundation.' | xargs sed -i 's/Firefox and the Firefox logos are trademarks of the Mozilla Foundation./JonDoBrowser and the JonDoBrowser logos are trademarks of JonDos GmbH, Germany./g'
 cp $project_dir/img/* ./browser/branding/official
+
 #commit to local repo
 source "$project_dir/local-commit.sh" $torbrowser_tag
