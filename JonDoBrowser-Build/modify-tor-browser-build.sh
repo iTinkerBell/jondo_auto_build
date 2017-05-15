@@ -62,7 +62,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "[% IF c(\"var/osx\") %]"
 		echo "  mkdir -p \$TBDIR/Contents/MacOS/JonDo"
 		echo "  mv \$rootdir/JonDo/JonDo_OSX/JonDoLauncher \$TBDIR/Contents/MacOS/JonDo/"
-		echo "  tar -xvf \$rootdir/JonDo/JonDo_OSX/JAP.app.tar.gz \$TBDIR/"
+		echo "  tar -xvf \$rootdir/JonDo/JonDo_OSX/JAP.app.tar.gz -C \$TBDIR/"
 		echo "[% END %]"
 		echo ""
 		echo "$line"
