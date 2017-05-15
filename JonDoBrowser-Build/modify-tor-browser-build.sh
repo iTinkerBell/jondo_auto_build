@@ -61,9 +61,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo ""
 		echo "[% IF c(\"var/osx\") %]"
 		echo "  mkdir -p \$TBDIR/Contents/MacOS/JonDo"
-		echo "  mkdir -p \$TBDIR/JAP.app"
-		echo "  mv \$rootdir/JonDo/JonDo_OSX/JAP.app/* \$TBDIR/JAP.app/"
 		echo "  mv \$rootdir/JonDo/JonDo_OSX/JonDoLauncher \$TBDIR/Contents/MacOS/JonDo/"
+		echo "  tar -xvf \$rootdir/JonDo/JonDo_OSX/JAP.app.tar.gz \$TBDIR/"
 		echo "[% END %]"
 		echo ""
 		echo "$line"
@@ -100,6 +99,12 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "./projects/tor-browser/config" > "./config.tmp"
 mv ./config.tmp ./projects/tor-browser/config
 cp -r "$project_dir/JonDo" ./projects/tor-browser/JonDo
+cd projects/tor-browser/JonDo/JonDo_OSX
+if [ -d JAP.app ]; then
+	tar -cvzf JAP.app.tar.gz ./JAP.app
+	rm -r JAP.app
+fi
+cd ../../../../
 
 #remove tor, tor-launcher from project
 rm -r ./projects/tor-launcher
