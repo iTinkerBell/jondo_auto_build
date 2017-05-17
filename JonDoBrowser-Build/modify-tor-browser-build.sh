@@ -79,6 +79,9 @@ done < "./projects/tor-browser/build" > "./build.tmp"
 mv ./build.tmp ./projects/tor-browser/build
 sed -i -- 's#tor-browser_#jondobrowser_#g' ./projects/tor-browser/build
 sed -i -- 's#PKG_DIR="tor-browser"#PKG_DIR="jondobrowser"#g' ./projects/tor-browser/build
+sed -i -- 's#OUTDIR/tor-browser#OUTDIR/jondobrowser#g' ./projects/tor-browser/build
+sed -i -- 's#OUTDIR/torbrowser-install#OUTDIR/jondobrowser-install#g' ./projects/tor-browser/build
+sed -i -- 's#MAR_FILE=tor-browser#MAR_FILE=jondobrowser#g' ./projects/tor-browser/build
 
 #modify tor-browser config
 while IFS='' read -r line || [[ -n "$line" ]]; do
@@ -132,3 +135,12 @@ while read -r line || [[ -n "$line" ]]; do
 		break
 	fi
 done < "rbm.conf"
+#remove other locales except for German and English
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"- ar" ]] || [[ $line == *"- es-ES" ]] || [[ $line == *"- fa" ]] || [[ $line == *"- fr" ]] || [[ $line == *"- it" ]] || [[ $line == *"- ko" ]] || [[ $line == *"- nl" ]] || [[ $line == *"- pl" ]] || [[ $line == *"- pt-BR" ]] || [[ $line == *"- ru" ]] || [[ $line == *"- tr" ]] || [[ $line == *"- vi" ]] || [[ $line == *"- zh-CN" ]] || [[ $line == *"var/locale_ja"* ]]; then
+		nothing = ""
+	else
+		echo "$line"	
+	fi
+done < "rbm.conf" > "rbm.conf.tmp"
+mv rbm.conf.tmp rbm.conf

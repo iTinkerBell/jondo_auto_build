@@ -45,9 +45,13 @@ mv ./archivereader_tmp.cpp ./toolkit/mozapps/update/updater/archivereader.cpp
 #modification for killing java when updating
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"const int callbackIndex ="* ]]; then
-		echo "#ifdef XP_WIN"
+		echo "#if defined(XP_WIN)"
 		echo "  system(\"taskkill /F /T /IM JonDo.exe\");"
 		echo "  system(\"wmic process where \\\"name like \'%java%\'\\\" delete\");"
+		echo "#elif defined(XP_MACOSX)"
+		echo "  system(\"pkill -f \'JAP.app\'\");"
+		echo "#else"
+		echo "  system(\"pkill -f \'java.*JAP.jar*\'\");"
 		echo "#endif"
 	fi
 	echo "$line"
