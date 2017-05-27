@@ -8,7 +8,7 @@ while read -r line || [[ -n "$line" ]]; do
 		line=${line##*]-}
 		line=${line%%\'}
 		tmp_build=${line##*-}
-		tmp_subversion=${line%%-build*}		
+		tmp_subversion=${line%%-build*}
 	fi
 	if [[ $line == *"firefox_version: "* ]]; then
 		firefox_version=${line##*firefox_version: }
@@ -29,6 +29,14 @@ git checkout -b "jondo$tmp_branch_name" $torbrowser_tag
 sed -i -- 's#aus1.torproject.org/torbrowser/update_3#jondobrowser.jondos.de#g' ./browser/app/profile/firefox.js
 sed -i -- 's#www.torproject.org/download/download-easy.html#jondobrowser.jondos.de/jondobrowser/#g' ./browser/branding/official/pref/firefox-branding.js
 sed -i -- 's#www.torproject.org/projects/torbrowser.html#jondobrowser.jondos.de/jondobrowser/#g' ./browser/branding/official/pref/firefox-branding.js
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"app.update.url"* ]] && [[ $line == *"torproject.org"* ]]; then
+		echo "pref(\"app.update.url\", \"https://jondobrowser.jondos.de/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%\");"
+	else
+		echo "$line"	
+	fi
+done < "./browser/app/profile/firefox.js" > "./firefox.js_tmp"
+mv ./firefox.js_tmp ./browser/app/profile/firefox.js
 #modification for mar signature check disable
 VerifySignatureFound=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
