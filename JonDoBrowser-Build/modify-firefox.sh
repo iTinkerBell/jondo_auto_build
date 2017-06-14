@@ -70,7 +70,7 @@ done < "./toolkit/mozapps/update/updater/updater.cpp" > "./updater.cpp.tmp"
 mv ./updater.cpp.tmp ./toolkit/mozapps/update/updater/updater.cpp
 #modification for xpi signature check disable
 git grep -l 'addon.id == "torbutton@torproject.org" ||' | xargs sed -i 's/addon.id == "torbutton@torproject.org" ||/addon.id== "torbutton@torproject.org" || addon.id == "info@jondos.de" || addon.id == "jondo-launcher@jondos.de" || addon.id == "jondoswitcher@jondos.de" ||/g'
-git grep -l 'addon.id != "torbutton@torproject.org" &&' | xargs sed -i 's/addon.id != "torbutton@torproject.org" &&/addon.id!= "torbutton@torproject.org" && addon.id != "info@jondos.de" && addon.id != "jondo-launcher@jondos.de" && addon.id != "jondoswitcher@jondos.de" &&/g'
+git grep -l 'addon.id != "torbutton@torproject.org" &&' | xargs sed -i 's/addon.id != "torbutton@torproject.org" &&/addon.id!= "torbutton@torproject.org" \&\& addon.id != "info@jondos.de" \&\& addon.id != "jondo-launcher@jondos.de" \&\& addon.id != "jondoswitcher@jondos.de" \&\&/g'
 git grep -l 'aAddon.id == "torbutton@torproject.org" ||' | xargs sed -i 's/aAddon.id == "torbutton@torproject.org" ||/aAddon.id== "torbutton@torproject.org" || aAddon.id == "info@jondos.de" || aAddon.id == "jondo-launcher@jondos.de" || aAddon.id == "jondoswitcher@jondos.de" ||/g'
 checkTorNetworkFound=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
