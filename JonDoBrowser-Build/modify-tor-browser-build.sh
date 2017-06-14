@@ -44,9 +44,11 @@ mv ./config.tmp ./projects/firefox/config
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"mv"*"input_files_by_name/tor-launcher"* ]]; then
 		#nothing=""
+		echo "$line"
 		echo "mv \$rootdir/JonDo/jondo-launcher@jondos.de.xpi \$TBDIR/\$EXTSPATH/jondo-launcher@jondos.de.xpi"
 	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
-		nothing=""
+		#nothing=""
+		echo "$line"
 	elif [[ $line == *"Extract the MAR tools"* ]]; then
 		#copy JonDo for windows
 		echo "[% IF c(\"var/windows\") %]"
@@ -67,11 +69,14 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo ""
 		echo "$line"
 	elif [[ $line == *"mv"*"input_files_by_name/torbutton"* ]]; then
+		echo "$line"
 		echo "mv [% c('input_files_by_name/jondoaddon') %] "'$TBDIR/$EXTSPATH/info@jondos.de.xpi'
 	elif [[ $line == *"TORBINPATH"* ]] || [[ $line == *"TORCONFIGPATH"* ]] || [[ $line == *"MEEKPROFILEPATH"* ]]; then
-		nothing=""
+		#nothing=""
+		echo "$line"
 	elif [[ $line == *"mkdir"*"/Tor" ]] || [[ $line == *"cp"*"/Tor/" ]] || [[ $line == *"chomod"*"/Tor" ]]; then
-		nothing=""
+		#nothing=""
+		echo "$line"
 	else
 		echo "$line"	
 	fi
@@ -86,13 +91,15 @@ sed -i -- 's#MAR_FILE=tor-browser#MAR_FILE=jondobrowser#g' ./projects/tor-browse
 #modify tor-browser config
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"- project: tor-launcher"* ]] || [[ $line == *"name: tor-launcher"* ]] ; then
-		nothing=""
+		#nothing=""
+		echo "$line"
 	elif [[ $line == *"- project: torbutton"* ]]; then
 		echo "  - project: jondoaddon"
-	elif [[ $line == *"name: torbutton"* ]]; then
 		echo "    name: jondoaddon"
+		echo "$line"
 	elif [[ $line == *"- project: tor" ]] || [[ $line == *"name: tor" ]] ; then
-		nothing=""
+		#nothing=""
+		echo "$line"
 	elif [[ $line == *"filename: Bundle-Data"* ]]; then
 		echo "$line"
 		echo "  - filename: JonDo"
@@ -110,10 +117,11 @@ fi
 cd ../../../../
 
 #remove tor, tor-launcher from project
-rm -r ./projects/tor-launcher
+#rm -r ./projects/tor-launcher
 
 #rename torbutton to jondoaddon and modify config
-mv ./projects/torbutton ./projects/jondoaddon
+#mv ./projects/torbutton ./projects/jondoaddon
+cp -r ./projects/torbutton ./projects/jondoaddon
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"git_url: "* ]]; then
 		echo "git_url: $git_dir/jondoaddon-local/.git"

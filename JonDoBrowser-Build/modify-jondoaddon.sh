@@ -3,7 +3,7 @@
 cd $project_dir
 cd ../local-repo/jondoaddon-local
 cp $project_dir/makexpi.sh ./
-git mv jondoaddon src
+
 #get version for jondoaddon
 while read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"<em:version>"* ]]; then

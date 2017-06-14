@@ -25,10 +25,13 @@ cd local-repo/firefox-local
 #git checkout $torbrowser_branch
 #make a new temporary branch from the tag
 git checkout -b "jondo$tmp_branch_name" $torbrowser_tag
-#modification for update url
+#modification for update url and default socks proxy configuration
 sed -i -- 's#aus1.torproject.org/torbrowser/update_3#jondobrowser.jondos.de#g' ./browser/app/profile/firefox.js
 sed -i -- 's#www.torproject.org/download/download-easy.html#jondobrowser.jondos.de/jondobrowser/#g' ./browser/branding/official/pref/firefox-branding.js
 sed -i -- 's#www.torproject.org/projects/torbrowser.html#jondobrowser.jondos.de/jondobrowser/#g' ./browser/branding/official/pref/firefox-branding.js
+sed -i -- 's#pref("network.proxy.socks", "127.0.0.1");#pref("network.proxy.socks", "");#g' ./browser/app/profile/000-tor-browser.js
+sed -i -- 's#pref("network.proxy.socks_port", 9150);#pref("network.proxy.socks_port", 0);#g' ./browser/app/profile/000-tor-browser.js
+sed -i -- 's#pref("network.proxy.socks_remote_dns", true);#pref("network.proxy.socks_remote_dns", false);#g' ./browser/app/profile/000-tor-browser.js
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"app.update.url"* ]] && [[ $line == *"torproject.org"* ]]; then
 		echo "pref(\"app.update.url\", \"https://jondobrowser.jondos.de/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%\");"
@@ -66,10 +69,57 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "./toolkit/mozapps/update/updater/updater.cpp" > "./updater.cpp.tmp"
 mv ./updater.cpp.tmp ./toolkit/mozapps/update/updater/updater.cpp
 #modification for xpi signature check disable
-git grep -l 'torbutton@torproject.org' | xargs sed -i 's/torbutton@torproject.org/info@jondos.de/g'
+git grep -l 'addon.id == "torbutton@torproject.org" ||' | xargs sed -i 's/addon.id == "torbutton@torproject.org" ||/addon.id == "torbutton@torproject.org" || addon.id == "info@jondos.de" || addon.id == "jondo-launcher@jondos.de" || addon.id == "jondoswitcher@jondos.de" ||/g'
+git grep -l 'addon.id != "torbutton@torproject.org" &&' | xargs sed -i 's/addon.id != "torbutton@torproject.org" &&/addon.id != "torbutton@torproject.org" && addon.id != "info@jondos.de" && addon.id != "jondo-launcher@jondos.de" && addon.id != "jondoswitcher@jondos.de" &&/g'
+git grep -l 'aAddon.id == "torbutton@torproject.org" ||' | xargs sed -i 's/aAddon.id == "torbutton@torproject.org" ||/aAddon.id == "torbutton@torproject.org" || aAddon.id == "info@jondos.de" || aAddon.id == "jondo-launcher@jondos.de" || aAddon.id == "jondoswitcher@jondos.de" ||/g'
+checkTorNetworkFound=0
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"bool isTor = false;"* ]]; then
+		checkTorNetworkFound=1
+	fi
+	if [ $checkTorNetworkFound == 1 ]; then
+		echo "$line"
+	else
+		if [[ $line == *"profile.default/extensions/torbutton@torproject.org.xpi"* ]]; then
+			echo "bool isTor = false;"
+			echo "#ifdef XP_WIN"
+			echo "    WCHAR envValue[10];"
+			echo "    int envValueLength = GetEnvironmentVariableW(L\"JONDO_NETWORK\", envValue, 10);"
+			echo " 	  if (envValueLength > 0 && lstrcmpW(envValue, L\"tor\") == 0) isTor = true;"
+			echo "#else"
+			echo "	  const char *envValue = PR_GetEnv(\"JONDO_NETWORK\");"
+			echo "	  if(envValue != NULL && strcmp(envValue, \"tor\") == 0) isTor = true;"
+			echo "#endif"
+		  	echo "if(isTor)	{"
+		  	echo "    uriString.Append(\"profile.default/extensions/torbutton@torproject.org.xpi\");"
+		  	echo "} else {"
+		  	echo "    uriString.Append(\"profile.default/extensions/info@jondos.de.xpi\");"
+		  	echo "}"
+		elif [[ $line == *"extensions/torbutton@torproject.org.xpi"* ]]; then
+			echo "bool isTor = false;"
+			echo "#ifdef XP_WIN"
+			echo "    WCHAR envValue[10];"
+			echo "    int envValueLength = GetEnvironmentVariableW(L\"JONDO_NETWORK\", envValue, 10);"
+			echo " 	  if (envValueLength > 0 && lstrcmpW(envValue, L\"tor\") == 0) isTor = true;"
+			echo "#else"
+			echo "	  const char *envValue = PR_GetEnv(\"JONDO_NETWORK\");"
+			echo "	  if(envValue != NULL && strcmp(envValue, \"tor\") == 0) isTor = true;"
+			echo "#endif"
+		  	echo "if(isTor)	{"
+		  	echo "    uriString.Append(\"extensions/torbutton@torproject.org.xpi\");"
+		  	echo "} else {"
+		  	echo "    uriString.Append(\"extensions/info@jondos.de.xpi\");"
+		  	echo "}"
+		else
+			echo "$line"
+		fi
+	fi
+done < "./toolkit/xre/nsAppRunner.cpp" > "./nsAppRunner.cpp.tmp"
+mv ./nsAppRunner.cpp.tmp ./toolkit/xre/nsAppRunner.cpp
+
+#enable jondofox addons instead of tor addons
 git grep -l 'torbutton%40torproject.org' | xargs sed -i 's/torbutton%40torproject.org/info%40jondos.de/g'
-git grep -l 'tor-launcher@torproject.org' | xargs sed -i 's/tor-launcher@torproject.org/jondo-launcher@jondos.de/g'
-git grep -l 'tor-launcher%40torproject.org' | xargs sed -i 's/tor-launcher%40torproject.org/jondo-launcher%40jondos.de/g'
+git grep -l 'tor-launcher%40torproject.org' | xargs sed -i 's/tor-launcher%40torproject.org/jondoswitcher%40jondos.de:0.1.1,jondo-launcher%40jondos.de/g'
 #modificaction for brand
 git grep -l 'TorBrowser' | xargs sed -i 's/TorBrowser/JonDoBrowser/g'
 git grep -l 'Tor Browser' | xargs sed -i 's/Tor Browser/JonDoBrowser/g'
