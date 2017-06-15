@@ -41,11 +41,13 @@ done < "./projects/firefox/config" > "./config.tmp"
 mv ./config.tmp ./projects/firefox/config
 
 #modify tor-browser build
+JonDoToTorFound = 0
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"mv"*"input_files_by_name/tor-launcher"* ]]; then
 		#nothing=""
 		echo "$line"
 		echo "mv \$rootdir/JonDo/jondo-launcher@jondos.de.xpi \$TBDIR/\$EXTSPATH/jondo-launcher@jondos.de.xpi"
+		echo "mv \$rootdir/JonDo/jondoswitcher@jondos.de.xpi \$TBDIR/\$EXTSPATH/jondoswitcher@jondos.de.xpi"
 	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
 		#nothing=""
 		echo "$line"
@@ -76,6 +78,25 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "$line"
 	elif [[ $line == *"mkdir"*"/Tor" ]] || [[ $line == *"cp"*"/Tor/" ]] || [[ $line == *"chomod"*"/Tor" ]]; then
 		#nothing=""
+		echo "$line"
+	elif [[ $line == *"zip -Xm omni.ja update.locale"* ]]; then
+		JonDoToTorFound = 1;
+		echo "$line"
+	elif [[ $line == *"MYDIR1"* ]]; then
+		JonDoToTorFound = 2;
+		echo "$line"
+	elif [ JonDoToTorFound == 1 ] && [[ $line == *"["*"IF c("*"var/windows"*"]"* ]]; then
+		JonDoToTorFound = 3;
+		echo "MYDIR1=\$TBDIR/JonDo"
+		echo "MYDIR2=\$TBDIR/\$EXTSPATH"
+		echo "[% IF c(\"var/osx\") %]"
+		echo "  MYDIR1=\$TBDIR/Contents/MacOS/JonDo"
+		echo "[% ELSE %]"
+		echo "  cp -r \$TBDIR/JonDoBrowser \$TBDIR/TorBrowser"
+		echo "[% END %]"
+		echo "cp \$MYDIR2/info@jondos.de.xpi \$MYDIR1/info@jondos.de.xpi"
+		echo "mv \$MYDIR2/torbutton@torproject.org.xpi \$MYDIR1/torbutton@torproject.org.xpi"
+		echo "mv \$MYDIR2/tor-launcher@torproject.org.xpi \$MYDIR1/tor-launcher@torproject.org.xpi"
 		echo "$line"
 	else
 		echo "$line"	
