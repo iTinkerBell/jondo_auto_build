@@ -41,16 +41,12 @@ done < "./projects/firefox/config" > "./config.tmp"
 mv ./config.tmp ./projects/firefox/config
 
 #modify tor-browser build
-JonDoToTorFound = 0
+JonDoToTorFound=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"mv"*"input_files_by_name/tor-launcher"* ]]; then
-		#nothing=""
 		echo "$line"
 		echo "mv \$rootdir/JonDo/jondo-launcher@jondos.de.xpi \$TBDIR/\$EXTSPATH/jondo-launcher@jondos.de.xpi"
 		echo "mv \$rootdir/JonDo/jondoswitcher@jondos.de.xpi \$TBDIR/\$EXTSPATH/jondoswitcher@jondos.de.xpi"
-	elif [[ $line == *"input_files_by_name/tor"*"tor.tar.gz"* ]]; then
-		#nothing=""
-		echo "$line"
 	elif [[ $line == *"Extract the MAR tools"* ]]; then
 		#copy JonDo for windows
 		echo "[% IF c(\"var/windows\") %]"
@@ -73,20 +69,14 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	elif [[ $line == *"mv"*"input_files_by_name/torbutton"* ]]; then
 		echo "$line"
 		echo "mv [% c('input_files_by_name/jondoaddon') %] "'$TBDIR/$EXTSPATH/info@jondos.de.xpi'
-	elif [[ $line == *"TORBINPATH"* ]] || [[ $line == *"TORCONFIGPATH"* ]] || [[ $line == *"MEEKPROFILEPATH"* ]]; then
-		#nothing=""
-		echo "$line"
-	elif [[ $line == *"mkdir"*"/Tor" ]] || [[ $line == *"cp"*"/Tor/" ]] || [[ $line == *"chomod"*"/Tor" ]]; then
-		#nothing=""
-		echo "$line"
 	elif [[ $line == *"zip -Xm omni.ja update.locale"* ]]; then
-		JonDoToTorFound = 1
+		JonDoToTorFound=1
 		echo "$line"
 	elif [[ $line == *"MYDIR1"* ]]; then
-		JonDoToTorFound = 2
+		JonDoToTorFound=2
 		echo "$line"
 	elif [ $JonDoToTorFound == 1 ] && [[ $line == *"var/windows"* ]]; then
-		JonDoToTorFound = 3
+		JonDoToTorFound=3
 		echo "MYDIR1=\$TBDIR/JonDo"
 		echo "MYDIR2=\$TBDIR/\$EXTSPATH"
 		echo "[% IF c(\"var/osx\") %]"
@@ -103,6 +93,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	fi
 done < "./projects/tor-browser/build" > "./build.tmp"
 mv ./build.tmp ./projects/tor-browser/build
+echo "JonDoToTorFound = $JonDoToTorFound"
 sed -i -- 's#tor-browser_#jondobrowser_#g' ./projects/tor-browser/build
 sed -i -- 's#PKG_DIR="tor-browser"#PKG_DIR="jondobrowser"#g' ./projects/tor-browser/build
 sed -i -- 's#OUTDIR/tor-browser#OUTDIR/jondobrowser#g' ./projects/tor-browser/build
