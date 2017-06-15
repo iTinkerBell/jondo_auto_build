@@ -80,13 +80,13 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		#nothing=""
 		echo "$line"
 	elif [[ $line == *"zip -Xm omni.ja update.locale"* ]]; then
-		JonDoToTorFound = 1;
+		JonDoToTorFound = 1
 		echo "$line"
 	elif [[ $line == *"MYDIR1"* ]]; then
-		JonDoToTorFound = 2;
+		JonDoToTorFound = 2
 		echo "$line"
-	elif [ JonDoToTorFound == 1 ] && [[ $line == *"["*"IF c("*"var/windows"*"]"* ]]; then
-		JonDoToTorFound = 3;
+	elif [ $JonDoToTorFound == 1 ] && [[ $line == *"var/windows"* ]]; then
+		JonDoToTorFound = 3
 		echo "MYDIR1=\$TBDIR/JonDo"
 		echo "MYDIR2=\$TBDIR/\$EXTSPATH"
 		echo "[% IF c(\"var/osx\") %]"
