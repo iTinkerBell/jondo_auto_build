@@ -69,7 +69,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	elif [[ $line == *"mv"*"input_files_by_name/torbutton"* ]]; then
 		echo "$line"
 		echo "mv [% c('input_files_by_name/jondoaddon') %] "'$TBDIR/$EXTSPATH/info@jondos.de.xpi'
-	elif [[ $line == *"zip -Xm omni.ja update.locale"* ]]; then
+	elif [ $JonDoToTorFound == 0 ] && [[ $line == *"zip -Xm omni.ja update.locale"* ]]; then
 		JonDoToTorFound=1
 		echo "$line"
 	elif [[ $line == *"MYDIR1"* ]]; then
