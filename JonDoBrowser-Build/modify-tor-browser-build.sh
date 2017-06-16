@@ -85,6 +85,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "  cp -r \$TBDIR/JonDoBrowser \$TBDIR/TorBrowser"
 		echo "[% END %]"
 		echo "cp \$MYDIR2/info@jondos.de.xpi \$MYDIR1/info@jondos.de.xpi"
+		echo "cp \$MYDIR2/jondo-launcher@jondos.de.xpi \$MYDIR1/jondo-launcher@jondos.de.xpi"
 		echo "mv \$MYDIR2/torbutton@torproject.org.xpi \$MYDIR1/torbutton@torproject.org.xpi"
 		echo "mv \$MYDIR2/tor-launcher@torproject.org.xpi \$MYDIR1/tor-launcher@torproject.org.xpi"
 		echo "$line"
