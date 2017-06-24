@@ -3,6 +3,7 @@
 cd /var/www/torupdates
 git pull
 #modify config.yml
+VersionLineFound=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"archive_url: "* ]]; then
 		echo "    archive_url: https://jondobrowser.jondos.de/jondobrowser/"
@@ -18,7 +19,11 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		echo "    release: $torbrowser_version"
 	elif [[ $line == *"nightly: "* ]]; then
 		echo "    #nightly: $torbrowser_version"
-	elif [[ $line == *"6.5n:"* ]]; then
+	elif [ $VersionLineFound == 0 ] && [[ $line == "versions:" ]]; then
+		VersionLineFound=1
+		echo "$line"
+	elif [ $VersionLineFound == 1 ]; then
+		VersionLineFound=2
 		echo "    $torbrowser_version:"
 	elif [[ $line == *"platformVersion: "* ]]; then
 		echo "        platformVersion: $firefox_version"
