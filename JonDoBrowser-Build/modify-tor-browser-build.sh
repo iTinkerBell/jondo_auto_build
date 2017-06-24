@@ -165,10 +165,13 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		nothing = ""
 	elif [ $RootProfileEdited == 0 ] && [[ $line == *"sudo sed -i -re"*"/rootfs/root/.profile"* ]]; then
 		RootProfileEdited=1
+		echo "$line"
 	elif [ $RootProfileEdited == 0 ] && [[ $line == *"sudo runc start -b"* ]]; then
 		echo "sudo sed -i -re 's/^(mesg n)(.*)$/#\\1\\2/g' '[% c(\"var/container/dir\") %]'/rootfs/root/.profile"
 		RootProfileEdited=1
-		echo "$line"	
+		echo "$line"
+	else
+		echo "$line"
 	fi
 done < "rbm.conf" > "rbm.conf.tmp"
 mv rbm.conf.tmp rbm.conf
