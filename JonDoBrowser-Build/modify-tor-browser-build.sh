@@ -145,7 +145,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	elif [[ $line == "version: "* ]]; then
 		echo "version: $jondoaddon_version"
 	else
-		echo "$line"	
+		echo "$line"
 	fi
 done < "./projects/jondoaddon/config" > "./config.tmp"
 mv ./config.tmp ./projects/jondoaddon/config
@@ -167,7 +167,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		RootProfileEdited=1
 		echo "$line"
 	elif [ $RootProfileEdited == 0 ] && [[ $line == *"sudo runc start -b"* ]]; then
-		echo "sudo sed -i -re 's/^(mesg n)(.*)$/#\\1\\2/g' '[% c(\"var/container/dir\") %]'/rootfs/root/.profile"
+		echo "    sudo sed -i -re 's/^(mesg n)(.*)$/#\\1\\2/g' '[% c(\"var/container/dir\") %]'/rootfs/root/.profile"
 		RootProfileEdited=1
 		echo "$line"
 	else
@@ -176,3 +176,19 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "rbm.conf" > "rbm.conf.tmp"
 mv rbm.conf.tmp rbm.conf
 sed -i -- 's#sudo runc start -b#sudo runc run -b#g' rbm.conf
+
+#fix selfrando path bug
+MoveSelfrandoEdited=0
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [ $MoveSelfrandoEdited == 0 ] && [[ $line == "mv Tools/TorBrowser Tools/JonDoBrowser" ]]; then
+		MoveSelfrandoEdited=1
+		echo "$line"
+	elif [ $MoveSelfrandoEdited == 0 ] && [[ $line == *"sed -i"*"/tc-wrapper/ld"* ]]; then
+		echo "mv Tools/TorBrowser Tools/JonDoBrowser"
+		MoveSelfrandoEdited=1
+		echo "$line"
+	else
+		echo "$line"
+	fi
+done < "projects/selfrando/build" > "build.tmp"
+mv build.tmp projects/selfrando/build
