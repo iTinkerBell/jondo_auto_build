@@ -31,6 +31,7 @@ source "$project_dir/modify-firefox.sh"
 source "$project_dir/modify-tor-browser-build.sh"
 source "$project_dir/modify-torupdates.sh"
 source "$project_dir/modify-tbb-windows-installer.sh"
+source "$project_dir/modify-torbutton.sh"
 
 #make
 cd $project_dir

@@ -96,7 +96,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	fi
 done < "./projects/tor-browser/build" > "./build.tmp"
 mv ./build.tmp ./projects/tor-browser/build
-echo "JonDoToTorFound = $JonDoToTorFound"
 sed -i -- 's#tor-browser_#jondobrowser_#g' ./projects/tor-browser/build
 sed -i -- 's#PKG_DIR="tor-browser"#PKG_DIR="jondobrowser"#g' ./projects/tor-browser/build
 sed -i -- 's#OUTDIR/tor-browser#OUTDIR/jondobrowser#g' ./projects/tor-browser/build
@@ -136,6 +135,8 @@ cd ../../../../
 
 #rename torbutton to jondoaddon and modify config
 #mv ./projects/torbutton ./projects/jondoaddon
+
+#modify jondoaddon config
 cp -r ./projects/torbutton ./projects/jondoaddon
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"git_url: "* ]]; then
@@ -149,6 +150,21 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	fi
 done < "./projects/jondoaddon/config" > "./config.tmp"
 mv ./config.tmp ./projects/jondoaddon/config
+
+#modify torbutton git url and gpg keyring in order to change jondo-related strings
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [[ $line == *"git_url: "* ]]; then
+		echo "git_url: $git_dir/torbutton-local/.git"
+	elif [[ $line == *"gpg_keyring: "* ]]; then
+		echo "gpg_keyring: tinkerbel.gpg"
+	elif [[ $line == "version: "* ]]; then
+		torbutton_version=${line##*version: }
+		echo "$line"
+	else
+		echo "$line"
+	fi
+done < "./projects/torbutton/config" > "./config.tmp"
+mv ./config.tmp ./projects/torbutton/config
 
 #get browser main version number
 while read -r line || [[ -n "$line" ]]; do
