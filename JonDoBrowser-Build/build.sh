@@ -1,6 +1,6 @@
 #!/bin/bash
-#tor_browser_build_commit_hash=${1:-b9fc5fc4a562ea8c5d7fdb797fd3c1ea6f6b413e}
-tor_browser_build_commit_hash=${1:-8d3c245def1e9047715266953fe83df560da0328}
+tor_browser_build_commit_hash=${1:-b9fc5fc4a562ea8c5d7fdb797fd3c1ea6f6b413e}
+#tor_browser_build_commit_hash=${1:-8d3c245def1e9047715266953fe83df560da0328}
 echo "Building with $tor_browser_build_commit_hash bundle."
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
