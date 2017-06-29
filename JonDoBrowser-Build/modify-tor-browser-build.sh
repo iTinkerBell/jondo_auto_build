@@ -175,11 +175,36 @@ while read -r line || [[ -n "$line" ]]; do
 	fi
 done < "rbm.conf"
 #remove other locales except for German and English
+RootProfileEdited=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	if [[ $line == *"- ar" ]] || [[ $line == *"- es-ES" ]] || [[ $line == *"- fa" ]] || [[ $line == *"- fr" ]] || [[ $line == *"- it" ]] || [[ $line == *"- ko" ]] || [[ $line == *"- nl" ]] || [[ $line == *"- pl" ]] || [[ $line == *"- pt-BR" ]] || [[ $line == *"- ru" ]] || [[ $line == *"- tr" ]] || [[ $line == *"- vi" ]] || [[ $line == *"- zh-CN" ]] || [[ $line == *"var/locale_ja"* ]]; then
 		nothing = ""
+	elif [ $RootProfileEdited == 0 ] && [[ $line == *"sudo sed -i -re"*"/rootfs/root/.profile"* ]]; then
+		RootProfileEdited=1
+		echo "$line"
+	elif [ $RootProfileEdited == 0 ] && [[ $line == *"sudo runc start -b"* ]]; then
+		echo "    sudo sed -i -re 's/^(mesg n)(.*)$/#\\1\\2/g' '[% c(\"var/container/dir\") %]'/rootfs/root/.profile"
+		RootProfileEdited=1
+		echo "$line"
 	else
 		echo "$line"
 	fi
 done < "rbm.conf" > "rbm.conf.tmp"
 mv rbm.conf.tmp rbm.conf
+sed -i -- 's#sudo runc start -b#sudo runc run -b#g' rbm.conf
+
+#fix selfrando path bug
+MoveSelfrandoEdited=0
+while IFS='' read -r line || [[ -n "$line" ]]; do
+	if [ $MoveSelfrandoEdited == 0 ] && [[ $line == "mv Tools/TorBrowser Tools/JonDoBrowser" ]]; then
+		MoveSelfrandoEdited=1
+		echo "$line"
+	elif [ $MoveSelfrandoEdited == 0 ] && [[ $line == *"sed -i"*"/tc-wrapper/ld"* ]]; then
+		echo "mv Tools/TorBrowser Tools/JonDoBrowser"
+		MoveSelfrandoEdited=1
+		echo "$line"
+	else
+		echo "$line"
+	fi
+done < "projects/selfrando/build" > "build.tmp"
+mv build.tmp projects/selfrando/build
