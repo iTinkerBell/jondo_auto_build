@@ -26,39 +26,47 @@ wstring ExeDir() {
 int _tmain(int argc, TCHAR*argv[])
 {
 	FreeConsole();
-	if (!CheckJonDo()) {
-		wcout << "Initializing JonDo Connection..." << endl;
-		
-		// additional information
-		STARTUPINFO si;
-		PROCESS_INFORMATION pi;
-		
-		// set the size of the structures
-		ZeroMemory(&si, sizeof(si));
-		si.cb = sizeof(si);
-		ZeroMemory(&pi, sizeof(pi));
+	if (argc == 2) {
+		bool isJAPRunning = CheckJonDo();
+		if (!isJAPRunning && wcscmp(argv[1], L"on") == 0) {
+			wcout << "Initializing JonDo Connection..." << endl;
 
-		wstring fullpath = ExeDir() + L"\\JonDo.exe";
+			// additional information
+			STARTUPINFO si;
+			PROCESS_INFORMATION pi;
 
-		// start the program up
-		if (CreateProcess(fullpath.c_str(),   // the path
-			L"JonDo.exe --hideUpdate",			// Command line
-			NULL,           // Process handle not inheritable
-			NULL,           // Thread handle not inheritable
-			FALSE,          // Set handle inheritance to FALSE
-			0,              // No creation flags
-			NULL,           // Use parent's environment block
-			NULL,           // Use parent's starting directory 
-			&si,            // Pointer to STARTUPINFO structure
-			&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
+			// set the size of the structures
+			ZeroMemory(&si, sizeof(si));
+			si.cb = sizeof(si);
+			ZeroMemory(&pi, sizeof(pi));
+
+			wstring fullpath = ExeDir() + L"\\JonDo.exe";
+
+			// start the program up
+			if (CreateProcess(fullpath.c_str(),   // the path
+				L"JonDo.exe --hideUpdate",			// Command line
+				NULL,           // Process handle not inheritable
+				NULL,           // Thread handle not inheritable
+				FALSE,          // Set handle inheritance to FALSE
+				0,              // No creation flags
+				NULL,           // Use parent's environment block
+				NULL,           // Use parent's starting directory 
+				&si,            // Pointer to STARTUPINFO structure
+				&pi             // Pointer to PROCESS_INFORMATION structure (removed extra parentheses)
 			) == 0) {
-			cout << GetLastError() << endl;
-		}else{
-			wcout << L"Successfully opened " << fullpath << endl;
+				cout << GetLastError() << endl;
+			}
+			else {
+				wcout << L"Successfully opened " << fullpath << endl;
+			}
+			// Close process and thread handles. 
+			CloseHandle(pi.hProcess);
+			CloseHandle(pi.hThread);
 		}
-		// Close process and thread handles. 
-		CloseHandle(pi.hProcess);
-		CloseHandle(pi.hThread);
+		if (isJAPRunning && wcscmp(argv[1], L"off") == 0) {
+			system("taskkill /F /T /IM JonDo.exe &");
+			system("wmic process where \"name like '%java%'\" delete &");
+		}
 	}
 	return 0;
 }

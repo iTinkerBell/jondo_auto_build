@@ -25,7 +25,7 @@ string exec(const char* cmd) {
 }
 
 int main(int argc, char*argv[]){
-    if(argc == 2){
+    if(argc == 3){
         char* javaExeRPath = "/JAP.app/Contents/MacOS/JavaAppLauncher --hideUpdate &";
         char* javaExePPath = new char [strlen(argv[1]) + strlen(javaExeRPath) + 1];
         strcpy(javaExePPath, argv[1]);
@@ -42,53 +42,11 @@ int main(int argc, char*argv[]){
                 break;
             }
         }
-    	if(!isJavaRunning){
+    	if(!isJavaRunning && strcmp(argv[2], "on") == 0){
     		system(javaExePPath);
     	}
+        if(isJavaRunning && strcmp(argv[2], "off") == 0){
+            system("pkill -f 'JAP.app' &");
+        }
 	}
 }
-	/*
-    char cCurrentPath[FILENAME_MAX];
-    if (!getcwd(cCurrentPath, sizeof(cCurrentPath)))
-    {
-        out << errno << endl;
-        out.close();
-        return errno;
-    }
-    out << cCurrentPath << endl;
-    */
-/*
-string exec(const char* cmd) {
-    array<char, 128> buffer;
-    string result;
-    shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
-    	out << "popen() failed" << endl;
-    	throw runtime_error("popen() failed!");
-    }
-    while (!feof(pipe.get())) {
-        if (fgets(buffer.data(), 128, pipe.get()) != NULL){
-            result += buffer.data();
-        	out << buffer.data();
-        }
-    }
-    return result;
-}
-*/
-/*
-#include <iostream>  
-#include <stdlib.h> 
-#include <fstream>
-using namespace std;
-int main(int argc, char*argv[]) {
-
-  ofstream out("/home/tinker/Downloads/tmp/jondobrowser_en-US/Browser/JonDo/out.txt", ofstream::out);
-  cout << argc << endl;
-  cout << argv[0] << endl;
-  out << argc << "," << argv[0] << endl;
-  system("java -jar JAP.jar &");
-  out << "java called";
-  out.close();
-  return 0;
-}
-*/
